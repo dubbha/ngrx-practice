@@ -4,9 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+
 import { CoreModule } from './core/core.module';
 import { TasksModule } from './tasks/tasks.module';
 import { SharedModule } from './shared/shared.module';
+
+import { environment } from '../environments/environment';
 
 // add this line if you don't have access to
 // index.html and you want to set base tag
@@ -25,6 +32,10 @@ import { MyInterceptor } from './core/interceptors/my.interceptor';
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
+    // Instrumentation must be imported after importing StoreModule (config is optional)
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
     TasksModule,
     CoreModule,
     SharedModule,
@@ -45,6 +56,6 @@ import { MyInterceptor } from './core/interceptors/my.interceptor';
 export class AppModule {
   // Diagnostic only: inspect router configuration
   constructor(router: Router) {
-    console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
+    // console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
   }
 }

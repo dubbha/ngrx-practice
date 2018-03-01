@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(`Request Interceptor:`);
+    // console.log(`Request Interceptor:`);
 
     // request interceptor
     let clonedRequest;
@@ -16,7 +16,7 @@ export class MyInterceptor implements HttpInterceptor {
         params: new HttpParams()
           .set('ts_interceptor', Date.now().toString())
       });
-      console.log(clonedRequest);
+      // console.log(clonedRequest);
     } else {
       clonedRequest = req;
     }
@@ -27,9 +27,9 @@ export class MyInterceptor implements HttpInterceptor {
         map((event: HttpEvent<any>) => {
           if (event instanceof HttpResponse) {
             // do stuff with response
-            console.log('Response Interceptor');
-            console.log(event);
-            console.log(event.body);
+            // console.log('Response Interceptor');
+            // console.log(event);
+            // console.log(event.body);
             return event;
           }
         })

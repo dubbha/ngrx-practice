@@ -40,11 +40,11 @@ export class AppComponent implements OnInit, OnDestroy {
    * @param $event - component instance
    */
   onActivate($event) {
-    console.log('Activated Component', $event);
+    // console.log('Activated Component', $event);
   }
 
   onDeactivate($event) {
-    console.log('Deactivated Component', $event);
+    // console.log('Deactivated Component', $event);
   }
 
   private setPageTitlesAndMeta() {

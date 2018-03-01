@@ -2,8 +2,9 @@
   <button class="btn btn-primary"
     (click)="createTask()">New Task</button>
   <br><br>
-  <app-task 
-    *ngFor="let task of tasks" 
+  <p *ngIf="(tasksState$ | async).error as value">{{value}}</p>
+  <app-task
+    *ngFor='let task of (tasksState$ | async).data'
     [task]="task"
     (complete)="completeTask($event)"
     (edit)="editTask($event)"

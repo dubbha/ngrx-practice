@@ -2,7 +2,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+
 import { TasksRoutingModule } from './tasks.routing.module';
+import { tasksReducer } from './../+store/reducers';
+import { TasksEffects } from '../+store/effects';
 
 import {
   TaskListComponent,
@@ -21,6 +26,8 @@ import {
   ],
   imports: [
     CommonModule,
+    StoreModule.forFeature('tasks', tasksReducer),
+    EffectsModule.forFeature([TasksEffects]),
     FormsModule,
     TasksRoutingModule
   ],

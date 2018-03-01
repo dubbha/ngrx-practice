@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState, TasksState } from './../../+store';
+import * as TasksActions from './../../+store/actions/tasks.actions';
+
 
 import { Task } from './../models/task.model';
 import { TaskPromiseService } from './../services';
@@ -9,15 +13,19 @@ import { TaskPromiseService } from './../services';
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
-  tasks: Array<Task>;
+  tasksState$: Store<TasksState>;
 
   constructor(
     private router: Router,
-    private taskPromiseService: TaskPromiseService
+    private taskPromiseService: TaskPromiseService,
+    private store: Store<AppState>,
   ) { }
 
   ngOnInit() {
-      this.getTasks().catch(err => console.log(err));
+      console.log('We have a store! ', this.store);
+      this.tasksState$ = this.store.select('tasks');
+
+      this.store.dispatch(new TasksActions.GetTasks());
   }
 
   createTask() {
@@ -26,15 +34,13 @@ export class TaskListComponent implements OnInit {
   }
 
   completeTask(task: Task): void {
-    task.done = true;
-    // TODO: если что-то пошло не так, вывести ошибку
-    this.taskPromiseService.updateTask(task);
+    this.store.dispatch(new TasksActions.DoneTask(task));
   }
 
   deleteTask(task: Task) {
-    this.taskPromiseService.deleteTask(task)
-      .then(() => this.tasks = this.tasks.filter(t => t !== task))
-      .catch(err => console.log(err));
+    // this.taskPromiseService.deleteTask(task)
+    //   .then(() => this.tasks = this.tasks.filter(t => t !== task))
+    //   .catch(err => console.log(err));
   }
 
   editTask(task: Task): void {
@@ -42,7 +48,7 @@ export class TaskListComponent implements OnInit {
     this.router.navigate(link);
   }
 
-  private async getTasks() {
-    this.tasks = await this.taskPromiseService.getTasks();
-  }
+  // private async getTasks() {
+  //   this.tasks = await this.taskPromiseService.getTasks();
+  // }
 }
