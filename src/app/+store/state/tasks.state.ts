@@ -11,5 +11,5 @@ export const initialTasksState: TasksState = {
     data: [],
     loading: false,
     loaded: false,
-    error: null
+    error: null,
 };

@@ -2,8 +2,8 @@
   "tasks": [
     {
       "id": 1,
-      "action": "Estimate",
-      "priority": 1,
+      "action": "EstimateX",
+      "priority": 3,
       "estHours": 8
     },
     {
@@ -28,13 +28,22 @@
       "id": 5,
       "action": "Build",
       "priority": 1,
-      "estHours": 4
+      "estHours": 6,
+      "done": true
     },
     {
       "id": 6,
       "action": "Deploy",
       "priority": 2,
       "estHours": 8
+    },
+    {
+      "id": 7,
+      "action": "kkj",
+      "priority": 3,
+      "estHours": 10,
+      "actHours": 0,
+      "done": false
     }
   ],
   "users": [

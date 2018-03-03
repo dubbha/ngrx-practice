@@ -1,29 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AppState, TasksState } from './../../+store';
+import { AppState, getTasksData, getTasksError } from './../../+store';
 import * as TasksActions from './../../+store/actions/tasks.actions';
 
 
 import { Task } from './../models/task.model';
-import { TaskPromiseService } from './../services';
 
 @Component({
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
-  tasksState$: Store<TasksState>;
+  tasks$: Store<ReadonlyArray<Task>>;
+  tasksError$: Store<Error | string>;
 
   constructor(
     private router: Router,
-    private taskPromiseService: TaskPromiseService,
     private store: Store<AppState>,
   ) { }
 
   ngOnInit() {
       console.log('We have a store! ', this.store);
-      this.tasksState$ = this.store.select('tasks');
+      this.tasks$ = this.store.select(getTasksData);
+      this.tasksError$ = this.store.select(getTasksError);
 
       this.store.dispatch(new TasksActions.GetTasks());
   }
@@ -34,13 +34,12 @@ export class TaskListComponent implements OnInit {
   }
 
   completeTask(task: Task): void {
-    this.store.dispatch(new TasksActions.DoneTask(task));
+    const doneTask = {...task, done: true};
+    this.store.dispatch(new TasksActions.UpdateTask(doneTask));
   }
 
   deleteTask(task: Task) {
-    // this.taskPromiseService.deleteTask(task)
-    //   .then(() => this.tasks = this.tasks.filter(t => t !== task))
-    //   .catch(err => console.log(err));
+    this.store.dispatch(new TasksActions.DeleteTask(task));
   }
 
   editTask(task: Task): void {

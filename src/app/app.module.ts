@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RouterStateSerializerProvider, routerReducers } from './+store';
 
 
 import { CoreModule } from './core/core.module';
@@ -32,7 +34,8 @@ import { MyInterceptor } from './core/interceptors/my.interceptor';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(routerReducers),
+    StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot([]),
     // Instrumentation must be imported after importing StoreModule (config is optional)
     !environment.production ? StoreDevtoolsModule.instrument() : [],
@@ -49,7 +52,8 @@ import { MyInterceptor } from './core/interceptors/my.interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: MyInterceptor,
       multi: true,
-    }
+    },
+    RouterStateSerializerProvider,
   ],
   bootstrap: [AppComponent]
 })
