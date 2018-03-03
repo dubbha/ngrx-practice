@@ -6,6 +6,7 @@ import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { TasksActionTypes } from './../actions';
 import * as TasksActions from './../actions/tasks.actions';
+import * as RouterActions from './../actions/router.actions';
 
 import { Observable } from 'rxjs/Observable';
 import { map, switchMap } from 'rxjs/operators';
@@ -45,10 +46,7 @@ export class TasksEffects {
       map((action: TasksActions.UpdateTask) => action.payload),
       switchMap(payload =>
         this.taskPromiseService.updateTask(payload)
-          .then(task => {
-            this.router.navigate(['/home']);
-            return new TasksActions.UpdateTaskSuccess(task);
-          })
+          .then(task => new TasksActions.UpdateTaskSuccess(task))
           .catch(err => new TasksActions.UpdateTaskError(err))
       )
     );
@@ -59,13 +57,21 @@ export class TasksEffects {
       map((action: TasksActions.CreateTask) => action.payload),
       switchMap(payload =>
         this.taskPromiseService.createTask(payload)
-          .then(task => {
-            this.router.navigate(['/home']);
-            return new TasksActions.CreateTaskSuccess(task);
-          })
+          .then(task => new TasksActions.CreateTaskSuccess(task))
           .catch(err => new TasksActions.CreateTaskError(err))
       )
     );
+
+  @Effect() createUpdateTaskSuccess$: Observable<Action> = this.actions$
+    .ofType<TasksActions.CreateTask | TasksActions.UpdateTask>(
+      TasksActionTypes.CREATE_TASK_SUCCESS,
+      TasksActionTypes.UPDATE_TASK_SUCCESS
+    )
+    .pipe(
+      map(action => new RouterActions.Go({
+        path: ['/home']
+      }))
+);
 
   @Effect() deleteTask$: Observable<Action> = this.actions$
     .ofType<TasksActions.DeleteTask>(TasksActionTypes.DELETE_TASK)

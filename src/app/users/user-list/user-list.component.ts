@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 
@@ -12,6 +12,7 @@ import { User } from './../models/user.model';
 import * as UsersActions from './../../+store/actions/users.actions';
 import { AppState, getUsers, getUsersError, getEditedUser } from './../../+store';
 import { AutoUnsubscribe } from './../../core/decorators';
+import * as RouterActions from './../../+store/actions/router.actions';
 
 @Component({
   templateUrl: './user-list.component.html',
@@ -26,7 +27,6 @@ export class UserListComponent implements OnInit {
   private editedUser: User;
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private store: Store<AppState>,
   ) { }
@@ -48,7 +48,9 @@ export class UserListComponent implements OnInit {
 
   editUser(user: User) {
     const link = ['/users/edit', user.id];
-    this.router.navigate(link);
+    this.store.dispatch(new RouterActions.Go({
+      path: link
+    }));
   }
 
   isEdited(user: User) {

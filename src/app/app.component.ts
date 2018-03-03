@@ -2,6 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { Router, NavigationEnd } from '@angular/router';
 
+// @Ngrx
+import { Store } from '@ngrx/store';
+import { AppState } from './+store';
+import * as RouterActions from './+store/actions/router.actions';
+
 // rxjs
 import { Subscription } from 'rxjs/Subscription';
 import { filter, map, switchMap } from 'rxjs/operators';
@@ -20,7 +25,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public messagesService: MessagesService,
     private titleService: Title,
     private metaService: Meta,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>,
   ) { }
 
   ngOnInit() {
@@ -32,7 +38,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   displayMessages(): void {
-    this.router.navigate([{ outlets: { popup: ['messages'] } }]);
+    this.store.dispatch(new RouterActions.Go({
+      path: [{ outlets: { popup: ['messages'] } }]
+    }));
     this.messagesService.isDisplayed = true;
   }
 

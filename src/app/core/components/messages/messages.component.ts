@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+
+// @Ngrx
+import { Store } from '@ngrx/store';
+import { AppState } from './../../../+store';
+import * as RouterActions from './../../../+store/actions/router.actions';
 
 import { MessagesService } from './../../services';
 
@@ -12,14 +16,16 @@ export class MessagesComponent implements OnInit {
 
   constructor(
     public messagesService: MessagesService,
-    private router: Router
+    private store: Store<AppState>,
   ) { }
 
   ngOnInit() {
   }
 
   close() {
-    this.router.navigate([{ outlets: { popup: null } }]);
+    this.store.dispatch(new RouterActions.Go({
+      path: [{ outlets: { popup: null } }]
+    }));
     this.messagesService.isDisplayed = false;
   }
 }

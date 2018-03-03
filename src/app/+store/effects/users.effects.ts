@@ -6,6 +6,7 @@ import { Action } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { UsersActionTypes } from './../actions';
 import * as UsersActions from './../actions/users.actions';
+import * as RouterActions from './../actions/router.actions';
 
 // Rxjs
 import { Observable } from 'rxjs/Observable';
@@ -49,10 +50,7 @@ export class UsersEffects {
       switchMap(payload =>
         this.userObservableService.updateUser(payload)
         .pipe(
-            map(user => {
-                this.router.navigate(['/users', { editedUserID: user.id }]);
-                return new UsersActions.UpdateUserSuccess(user);
-            }),
+            map(user => new UsersActions.UpdateUserSuccess(user)),
             catchError(err => of(new UsersActions.UpdateUserError(err)))
         )
       )
@@ -65,14 +63,26 @@ export class UsersEffects {
       switchMap(payload =>
         this.userObservableService.createUser(payload)
         .pipe(
-            map(user => {
-                this.router.navigate(['/users']);
-                return new UsersActions.CreateUserSuccess(user);
-            }),
+            map(user => new UsersActions.CreateUserSuccess(user)),
             catchError(err => of(new UsersActions.CreateUserError(err)))
         )
       )
     );
+
+  @Effect() createUpdateUserSuccess$: Observable<Action> = this.actions$
+    .ofType<UsersActions.CreateUser | UsersActions.UpdateUser>(
+      UsersActionTypes.CREATE_USER_SUCCESS,
+      UsersActionTypes.UPDATE_USER_SUCCESS
+    )
+    .pipe(
+      map(action => (<any>action).payload),
+      map(user => {
+        const path = user.id
+          ? ['/users', { editedUserId: user.id }]
+          : ['/users'];
+        return new RouterActions.Go({ path });
+      })
+);
 
   @Effect() deleteUser$: Observable<Action> = this.actions$
     .ofType<UsersActions.DeleteUser>(UsersActionTypes.DELETE_USER)

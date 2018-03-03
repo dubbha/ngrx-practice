@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 // @Ngrx
 import { Store } from '@ngrx/store';
 import { AppState, getUsersOriginalUser } from './../../+store';
-import * as UsersActions from './../../+store/actions/users.actions';
 import { of } from 'rxjs/observable/of';
+import * as UsersActions from './../../+store/actions/users.actions';
+import * as RouterActions from './../../+store/actions/router.actions';
 
 // rxjs
 import { Observable } from 'rxjs/Observable';
@@ -26,7 +26,6 @@ export class UserFormComponent implements OnInit, CanComponentDeactivate {
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
-    private location: Location,
     private dialogService: DialogService
   ) { }
 
@@ -47,7 +46,7 @@ export class UserFormComponent implements OnInit, CanComponentDeactivate {
   }
 
   goBack() {
-    this.location.back();
+    this.store.dispatch(new RouterActions.Back());
   }
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Router, Resolve } from '@angular/router';
+import { Resolve } from '@angular/router';
 
 // NgRx
 import { Store } from '@ngrx/store';
 import { AppState, getSelectedUserByUrl } from './../../+store';
+import * as RouterActions from './../../+store/actions/router.actions';
 
 // rxjs
 import { Observable } from 'rxjs/Observable';
@@ -17,7 +18,6 @@ export class UserResolveGuard implements Resolve<User> {
 
   constructor(
     private store: Store<AppState>,
-    private router: Router
   ) {}
 
   resolve(): Observable<User> {
@@ -27,7 +27,9 @@ export class UserResolveGuard implements Resolve<User> {
             if (user) {
               return of(user);
             } else {
-              this.router.navigate(['/users']);
+              this.store.dispatch(new RouterActions.Go({
+                path: ['/users']
+              }));
               return of(null);
             }
           }),

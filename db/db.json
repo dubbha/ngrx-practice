@@ -2,7 +2,7 @@
   "tasks": [
     {
       "id": 1,
-      "action": "EstimateX",
+      "action": "Estimate",
       "priority": 3,
       "estHours": 8
     },
