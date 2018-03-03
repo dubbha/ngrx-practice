@@ -11,7 +11,7 @@ import { UsersEffects, usersReducer } from '../+store';
 
 import { UsersRoutingModule, usersRouterComponents } from './users.routing.module';
 
-import { UserComponent, UserArrayService, UserObservableService, UserResolveGuard } from '.';
+import { UserComponent, UserArrayService, UserObservableService } from '.';
 import { UsersAPIProvider } from './users.config';
 
 @NgModule({
@@ -30,7 +30,6 @@ import { UsersAPIProvider } from './users.config';
     UserArrayService,
     UserObservableService,
     UsersAPIProvider,
-    UserResolveGuard
   ]
 })
 export class UsersModule {}

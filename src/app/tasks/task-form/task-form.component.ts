@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 // ngrx
 import { Store } from '@ngrx/store';
@@ -24,20 +23,12 @@ export class TaskFormComponent implements OnInit {
   private sub: Subscription;
 
   constructor(
-    private route: ActivatedRoute,
     private store: Store<AppState>
   ) { }
 
   ngOnInit(): void {
     this.sub = this.store.select(getSelectedTaskByUrl)
-    .subscribe(task => this.task = task);
-
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.store.dispatch(new TasksActions.GetTask(+id));
-      }
-    });
+      .subscribe(task => this.task = task);
   }
 
   saveTask() {

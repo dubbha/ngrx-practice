@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-
   constructor(
     private router: Router
   ) { }

@@ -23,8 +23,6 @@ export class TaskListComponent implements OnInit {
       console.log('We have a store! ', this.store);
       this.tasks$ = this.store.select(getTasksData);
       this.tasksError$ = this.store.select(getTasksError);
-
-      this.store.dispatch(new TasksActions.GetTasks());
   }
 
   createTask() {
@@ -48,8 +46,4 @@ export class TaskListComponent implements OnInit {
       path: link
     }));
   }
-
-  // private async getTasks() {
-  //   this.tasks = await this.taskPromiseService.getTasks();
-  // }
 }

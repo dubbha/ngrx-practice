@@ -1,4 +1,4 @@
-export * from './guards/user-resolve.guard';
+export * from './guards';
 export * from './services';
 
 export * from './users.component';

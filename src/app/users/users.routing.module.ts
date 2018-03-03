@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { UsersComponent, UserListComponent, UserFormComponent, UserResolveGuard } from '.';
+import { UsersComponent, UserListComponent, UserFormComponent, UsersStateLoadingGuard } from '.';
 
 import { CanDeactivateGuard } from './../shared';
 
@@ -18,13 +18,11 @@ const routes: Routes = [
         path: 'edit/:userID',
         component: UserFormComponent,
         canDeactivate: [CanDeactivateGuard],
-        resolve: {
-          user: UserResolveGuard
-        }
       },
       {
         path: '',
-        component: UserListComponent
+        component: UserListComponent,
+        canActivate: [UsersStateLoadingGuard]
       }
     ]
   }
@@ -38,6 +36,9 @@ export let usersRouterComponents = [UsersComponent, UserListComponent, UserFormC
   ],
   exports: [
     RouterModule
+  ],
+  providers: [
+    UsersStateLoadingGuard,
   ]
 })
 export class UsersRoutingModule { }

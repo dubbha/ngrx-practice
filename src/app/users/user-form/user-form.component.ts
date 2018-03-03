@@ -3,36 +3,37 @@ import { ActivatedRoute } from '@angular/router';
 
 // @Ngrx
 import { Store } from '@ngrx/store';
-import { AppState, getUsersOriginalUser } from './../../+store';
+import { AppState, getUsersOriginalUser, getSelectedUserByUrl } from './../../+store';
 import { of } from 'rxjs/observable/of';
 import * as UsersActions from './../../+store/actions/users.actions';
 import * as RouterActions from './../../+store/actions/router.actions';
 
 // rxjs
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { switchMap } from 'rxjs/operators';
 
+import { AutoUnsubscribe } from '../../core';
 import { DialogService, CanComponentDeactivate } from './../../shared';
 import { User } from './../models/user.model';
-import { UserObservableService } from './../services';
 
 @Component({
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css'],
 })
+@AutoUnsubscribe()
 export class UserFormComponent implements OnInit, CanComponentDeactivate {
   user: User;
 
   constructor(
+    private sub: Subscription,
     private store: Store<AppState>,
-    private route: ActivatedRoute,
     private dialogService: DialogService
   ) { }
 
   ngOnInit(): void {
-    this.route.data.subscribe(data => {
-      this.user = {...data.user};
-    });
+    this.sub = this.store.select(getSelectedUserByUrl)
+      .subscribe(user => this.user = user);
   }
 
   saveUser() {
